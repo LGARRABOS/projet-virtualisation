@@ -7,7 +7,7 @@
 - [ ] **Activité principale :** Quel est votre cœur de métier ? Quels logiciels utilisez-vous au quotidien (ERP, Sage, EBP, Logiciels métier spécifiques) ?
 boite de 50 persone qui font du photovoltaique, prohjet de centrale solaire, bcp de technicient et ingé en bureau d'étude. Sage erp, site internet wordpress hébergé chez wix, a héberger a la maison. l'ancine qui s'en occuppe s'en vas, a deleguer a société de presta 
 - [ ] **Typologie :** Avez-vous différents profils (ex: Administratif léger vs Bureau d'études gourmand en ressources) ?
-Suite Office, a garder
+Oui pour les accés aux applications specifiques (dossier RH, compta, bureau d'etude etc...)
 - [ ] **Mobilité :** Avez-vous besoin d'accès à distance (Télétravail, VPN) ou tout se fait-il au bureau 
 Télétravail a 2 jours par semaine. VPN necessaire pour acces au data et les chantiers.
 (License forti ou autre firewall) 50 license stable augumentation a X2 dans 5/10 ans. (deuxieme site a strasbourg)
@@ -18,7 +18,7 @@ Télétravail a 2 jours par semaine. VPN necessaire pour acces au data et les ch
 - [ ] **Dette technique :** Avez-vous des logiciels anciens qui nécessitent absolument une vieille version de Windows ou Linux ?
 , NAS a gardé pour les datas 
 - [ ] **Stockage des données :** Où sont vos fichiers aujourd'hui ? (Serveur local, NAS, Cloud, dispersés sur les PC ?)
-nas local 
+nas local/ serveur de stockage local 
 - [ ] **Périphériques :** Avez-vous des imprimantes réseaux, scanners ou automates qui doivent communiquer avec le serveur ?
 Grosse imprimante A1 reseau accessible tt le monde 
 - [ ] **Matériel actuel :** Dispose-t-on de matériel serveur existant à réutiliser ou part-on de zéro ?
