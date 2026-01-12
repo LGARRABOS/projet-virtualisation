@@ -18,7 +18,7 @@ Télétravail a 2 jours par semaine. VPN necessaire pour acces au data et les ch
 - [ ] **Dette technique :** Avez-vous des logiciels anciens qui nécessitent absolument une vieille version de Windows ou Linux ?
 , NAS a gardé pour les datas 
 - [ ] **Stockage des données :** Où sont vos fichiers aujourd'hui ? (Serveur local, NAS, Cloud, dispersés sur les PC ?)
-nas local 
+nas local/ serveur de stockage local 
 - [ ] **Périphériques :** Avez-vous des imprimantes réseaux, scanners ou automates qui doivent communiquer avec le serveur ?
 Grosse imprimante A1 reseau accessible tt le monde 
 - [ ] **Matériel actuel :** Dispose-t-on de matériel serveur existant à réutiliser ou part-on de zéro ?
