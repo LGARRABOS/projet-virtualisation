@@ -25,3 +25,6 @@ La virtualisation est une technologie qui permet de créer une version virtuelle
 - **Cas d'usage** : Exécution de logiciels anciens, développement multi-plateforme, jeux vidéo rétro.
 
 ### Conteneurisation
+- **Définition** : Fonctionnalité du noyau Linux permettant d’isoler des processus afin de créer des environnements d’exécution indépendants.
+- **Performance** : Un conteneur est plus rapide et plus léger qu’une machine virtuelle.
+- **Cad d'usage** : Environnements d’exécution d’applications modernes (microservices, déploiement continu, cloud).
