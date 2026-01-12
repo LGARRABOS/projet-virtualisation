@@ -33,7 +33,8 @@
 | Matériel Réseau | Pack Fortinet (Gate, 2x Switchs, 4x APs) | 5 500 € |
 | Licence Sécurité | FortiGate UTP Bundle | 900 € /an |
 | Main d'œuvre | Installation & Config Réseau (2 jours) | 1 200 € |
-| **TOTAL PROJET** | | **6 700 € HT** |
+| **TOTAL PROJET (Investissement)** | | **6 700 € HT** |
+| **COÛT ANNUEL (Récurrent)** | *Renouvellement Licences* | **900 € HT /an** |
 
 **⚠️ Limites :** Le site WordPress reste chez Wix (pas de serveur pour l'héberger). Le NAS actuel reste un point de défaillance unique (SPOF) et risque d'être lent pour 50 utilisateurs simultanés.
 
@@ -57,6 +58,7 @@
 ### Prestations incluses
 *   Migration des données de l'ancien NAS vers TrueNAS.
 *   Migration du site Wix vers VM WordPress locale.
+*   **Domaine :** Achat et gestion du domaine **`nova-solar.fr`** (via Cloudflare).
 *   Mise en place des sauvegardes automatisées (Snapshots horaires).
 
 ### Budget Estimatif (Hors Maintenance)
@@ -64,10 +66,12 @@
 | :--- | :--- | :--- |
 | Matériel Réseau | Pack Fortinet (Gate, 2x Switchs, 4x APs) | 5 500 € |
 | Licence Sécurité | FortiGate UTP + FortiClient EDR/ZTNA (50 users) | 2 500 € /an |
+| Nom de Domaine | nova-solar.fr (Cloudflare) | 15 € /an |
 | Serveur Calcul | HPE DL380 Gen11 (Xeon Platinum, 128Go, NVMe) | 12 500 € |
 | Serveur Stockage | Serveur TrueNAS (Full Flash SSD) | 3 200 € |
 | Main d'œuvre | Install, Migration Data & Web (4 jours) | 2 400 € |
-| **TOTAL PROJET** | | **23 600 € HT** |
+| **TOTAL PROJET (Investissement)** | | **23 600 € HT** |
+| **COÛT ANNUEL (Récurrent)** | *Licences + Domaine* | **2 515 € HT /an** |
 
 **✅ Avantages :** Performance accrue, souveraineté des données (Site Web @Home), séparation des rôles (Calcul vs Stockage).
 
@@ -96,10 +100,12 @@
 | :--- | :--- | :--- |
 | Matériel Réseau | Pack Fortinet (Gate, 2x Switchs, 4x APs) | 5 500 € |
 | Licence Sécurité | FortiGate UTP + FortiClient EDR/ZTNA (50 users) | 2 500 € /an |
+| Nom de Domaine | nova-solar.fr (Cloudflare) | 15 € /an |
 | Cluster Calcul | 2x HPE DL380 Gen11 (Xeon Platinum) | 25 000 € |
 | Stockage & Save | TrueNAS Enterprise (Full Flash) + Backup ext | 4 500 € |
 | Main d'œuvre | Config Cluster HA & PRA (6 jours) | 3 600 € |
-| **TOTAL PROJET** | | **38 600 € HT** |
+| **TOTAL PROJET (Investissement)** | | **38 600 € HT** |
+| **COÛT ANNUEL (Récurrent)** | *Licences + Domaine* | **2 515 € HT /an** |
 
 **✅ Avantages :** Résilience maximale, maintenance sans interruption de service (migration des VMs à chaud).
 
