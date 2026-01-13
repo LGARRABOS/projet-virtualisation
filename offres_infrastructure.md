@@ -1,134 +1,135 @@
-# Proposition Commerciale & Technique : Refonte Infrastructure IT
-**Client :** PME Photovoltaïque (50 collaborateurs - Projection 100)  
-**Projet :** Déménagement (Pessac) / Sécurisation / Internalisation  
+# Proposition Commerciale & Technique : Architecture Multi-Sites (Pessac / Strasbourg)
+**Client :** "nova-solar.fr" (100 collaborateurs - 50/site)  
+**Projet :** Interconnexion Sites / Sécurisation / PRA  
 **Date :** 12 Janvier 2026
 
 ---
 
-## Synthèse des besoins
-*   **Réseau & Sécurité :** Gestion de 50 utilisateurs + Télétravail (VPN SSL), couverture WiFi des nouveaux locaux, isolation des flux (VLANs).
-*   **Hébergement :** Internalisation du site web (WordPress), ERP Sage, Serveur de fichiers.
-*   **Disponibilité :** Exigence forte (RTO proche de 0), sauvegardes fréquentes (toutes les 30min/1h).
-*   **Administration :** Délégation totale (Infogérance 24/7).
+## Synthèse des besoins (Multi-Sites)
+*   **Architecture :** Deux sites distants (Pessac & Strasbourg) à interconnecter (VPN IPsec / SD-WAN).
+*   **Volumétrie :** 3 étages de 100m² par site. 50 collaborateurs par site.
+*   **Continuité :** Utiliser le site de Strasbourg comme site de secours (PRA) pour Pessac.
+*   **Réseau :** Couverture Wifi dense (3 étages) et Switching réparti.
 
 ---
 
-## OFFRE 1 : L'ESSENTIEL (SÉCURITÉ RÉSEAU)
-*Cette offre se concentre uniquement sur la sécurisation des accès et du réseau, en conservant le stockage actuel (NAS) pour limiter l'investissement initial.*
+## CONNECTIVITÉ TRÈS HAUT DÉBIT (Option Opérateur)
+*Offre recommandée : Orange Business ou Bouygues Telecom Entreprises*
+*   **Technologie :** Fibre Pro XGS-PON (Débit jusqu'à 8 Gb/s).
+*   **Sites :** 1 lien pour Pessac + 1 lien pour Strasbourg.
+*   **Adresse IP :** IP Fixe incluse (indispensable pour les VPNs).
+*   **Coût Estimatif :** **50 € HT / mois / site** (soit 100 € HT / mois total).
+*   *Frais de raccordement (FAS) : Offerts sur engagement 36 mois.*
 
-### Architecture Technique
-*   **Pare-feu :** 1x Fortinet **FortiGate 80F** (Dimensionné pour 50-80 utilisateurs + VPN).
-*   **Commutation :** 2x **FortiSwitch 124F-POE** (48 ports total, POE pour les bornes et téléphones).
-*   **WiFi :** 4x Bornes **FortiAP 231F** (Wifi 6, gérées par le FortiGate).
-*   **Stockage :** Maintien du NAS existant (Nettoyage et sécurisation des accès).
+---
+
+## DÉTAIL DES ACCESSOIRES & ENVIRONNEMENT (Inclus dans les offres)
+*Pour garantir une installation professionnelle et pérenne.*
+
+*   **Baies Serveurs :**
+    *   **Pessac :** 1x Baie 42U (800x1000) vitrée, ventilée.
+    *   **Strasbourg :** 1x Baie 24U (600x1000) pour l'équipement réseau (et serveur en Premium).
+*   **Gestion Électrique :**
+    *   **Offres 2 & 3 (Serveurs) :** 2x Eaton 3000VA (Rackables) - 1 par site.
+    *   **Offre 1 (Réseau seul) :** 2x Eaton Ellipse PRO 850VA - 1 par site.
+    *   **PDU :** 4x Bandeaux de prises rackables (2 par baie).
+*   **Connectique & Câblage :**
+    *   50x Câbles RJ45 Cat6a (0.5m) - Pour le brassage propre des switchs.
+    *   20x Câbles RJ45 Cat6a (2m) - Pour les serveurs et uplink.
+    *   Modules SFP+ 10G & DAC Cables pour liaison Cœur <-> Serveurs.
+    *   Organisateurs de câbles (Passe-câbles balais).
+
+---
+
+## OFFRE 1 : SOCLE RÉSEAU SÉCURISÉ (SD-WAN)
+*L'interconnexion sécurisée des deux sites, sans serveurs d'application.*
+
+### Architecture Réseau (x2 Sites)
+*   **Cœur de Réseau (Pessac & Strasbourg) :**
+    *   2x **FortiGate 80F** (1 par site) configurés en VPN IPsec Site-à-Site (Lien permanent).
+*   **Distribution (Par site : 2 en Baie + 3 Étages) :**
+    *   10x **FortiSwitch 124F-POE** (5 par site : 2 en Cœur de réseau redondant + 1 par étage).
+*   **Wifi 6 (Par site : 3 étages) :**
+    *   12x **FortiAP 231F** (6 par site, 2 par étage pour densité/couverture).
 
 ### Prestations incluses
-*   Installation et rackage du matériel réseau.
-*   Configuration des VLANs (Admin, Staff, Invités).
-*   Configuration VPN SSL (FortiClient) pour le télétravail.
+*   Configuration SD-WAN / VPN inter-sites.
+*   Segmentation VLANs (Voix, Data, Invités) propagée sur les 2 sites.
 
 ### Budget Estimatif (Hors Maintenance)
 | Poste | Détail | Prix HT |
 | :--- | :--- | :--- |
-| Matériel Réseau | Pack Fortinet (Gate, 2x Switchs, 4x APs) | 5 500 € |
-| Licence Sécurité | FortiGate UTP Bundle | 900 € /an |
-| Main d'œuvre | Installation & Config Réseau (2 jours) | 1 200 € |
-| **TOTAL PROJET (Investissement)** | | **6 700 € HT** |
-| **COÛT ANNUEL (Récurrent)** | *Renouvellement Licences* | **900 € HT /an** |
-
-**⚠️ Limites :** Le site WordPress reste chez Wix (pas de serveur pour l'héberger). Le NAS actuel reste un point de défaillance unique (SPOF) et risque d'être lent pour 50 utilisateurs simultanés.
+| Matériel Réseau | 2x FortiGate, 10x Switchs, 12x APs | 18 500 € |
+| Environnement | Baies, Onduleurs 850VA, Câblage | 2 000 € |
+| Licences Sécurité | 2x FortiGate UTP Bundle | 1 800 € /an |
+| Main d'œuvre | Déploiement & Config Multi-site (4 jours) | 2 400 € |
+| **TOTAL PROJET** | | **22 900 € HT** |
+| **COÛT ANNUEL** | *Licences Fortinet* | **1 800 € HT /an** |
 
 ---
 
-## OFFRE 2 : STANDARD (PERFORMANCE & XCP-NG) - *Recommandée*
-*L'équilibre idéal. On remplace le stockage vieillissant et on ajoute un serveur de calcul sous XCP-ng pour héberger vos applications métiers et le site web.*
+## OFFRE 2 : STANDARD (CENTRALISÉE PESSAC)
+*L'intelligence est centralisée au siège. Strasbourg est connecté en VPN et travaille sur les ressources de Pessac.*
 
-### Architecture Technique
-*   **Réseau :** Identique Offre 1 (FortiGate + 2x FortiSwitch + 4x FortiAP).
-*   **Serveur Calcul (Hyperviseur) :** 1x Serveur **HPE ProLiant DL380 Gen11** (Intel Xeon Platinum 84xx, **128Go RAM DDR5**, **Stockage Full NVMe**).
-    *   **Stockage Local :** 2x SSD NVMe 1.92TB Mixed Use (RAID 1) - Capacité utile : ~1.8TB.
-    *   OS : **XCP-ng** (Virtualisation).
-    *   VMs : Contrôleur de Domaine, Sage ERP, Serveur Web (WordPress), XOA (Gestion).
-*   **Sécurité Endpoint :** Agent FortiClient EMS (EDR/ZTNA) déployé sur les 50 postes.
-*   **Serveur Stockage :** 1x Serveur dédié **TrueNAS** (Full Flash SSD).
-    *   **Disques :** 4x SSD SATA 4TB (RAIDZ1) - Capacité utile : ~11TB.
-    *   Rôle 1 : Cible de backup (NFS) haute performance.
-    *   Rôle 2 : Serveur de fichiers (Partages Windows/SMB).
+### Architecture Système
+*   **Site Pessac (Siège) :**
+    *   1x Serveur **HPE ProLiant DL380 Gen11** (Xeon Platinum, 128Go, NVMe) -> Héberge toutes les VMs (ERP, Web, DC).
+    *   1x Stockage **TrueNAS** (Full Flash) pour les fichiers et backups locaux.
+*   **Site Strasbourg (Agence) :**
+    *   Pas de serveur local.
+    *   Accès distant aux applications via le tunnel VPN sécurisé (Latence faible grâce à la Fibre).
 
-### Prestations incluses
-*   Migration des données de l'ancien NAS vers TrueNAS.
-*   Migration du site Wix vers VM WordPress locale.
-*   **Domaine :** Achat et gestion du domaine **`nova-solar.fr`** (via Cloudflare).
-*   Mise en place des sauvegardes automatisées (Snapshots horaires).
+### Avantages
+*   Gestion simplifiée (tout est au même endroit).
+*   Coût matériel réduit.
 
-### Budget Estimatif (Hors Maintenance)
+### Budget Estimatif
 | Poste | Détail | Prix HT |
 | :--- | :--- | :--- |
-| Matériel Réseau | Pack Fortinet (Gate, 2x Switchs, 4x APs) | 5 500 € |
-| Licence Sécurité | FortiGate UTP + FortiClient EDR/ZTNA (50 users) | 2 500 € /an |
-| Nom de Domaine | nova-solar.fr (Cloudflare) | 15 € /an |
-| Serveur Calcul | HPE DL380 Gen11 (Xeon Platinum, 128Go, NVMe) | 12 500 € |
-| Serveur Stockage | Serveur TrueNAS (Full Flash SSD) | 3 200 € |
-| Main d'œuvre | Install, Migration Data & Web (4 jours) | 2 400 € |
-| **TOTAL PROJET (Investissement)** | | **23 600 € HT** |
-| **COÛT ANNUEL (Récurrent)** | *Licences + Domaine* | **2 515 € HT /an** |
-
-**✅ Avantages :** Performance accrue, souveraineté des données (Site Web @Home), séparation des rôles (Calcul vs Stockage).
+| Matériel Réseau | Pack Multi-site complet (Offre 1) | 18 500 € |
+| Environnement | Baies, Onduleurs, Câblage complet | 3 500 € |
+| Licences Sécurité | 2x Gate + 100x FortiClient EDR/ZTNA | 4 500 € /an |
+| Serveur Calcul | 1x HPE DL380 Gen11 (Pessac) | 12 500 € |
+| Stockage NAS | 1x TrueNAS Flash (Pessac) | 3 200 € |
+| Main d'œuvre | Install & Config Centralisée (5 jours) | 3 000 € |
+| **TOTAL PROJET** | | **40 700 € HT** |
+| **COÛT ANNUEL** | *Licences (100 users)* | **4 500 € HT /an** |
+| | *Abonnement Fibre Orange (2 sites)* | **1 200 € HT /an** |
 
 ---
 
-## OFFRE 3 : PREMIUM (HAUTE DISPONIBILITÉ)
-*Réponse à l'exigence de "0 coupure". Infrastructure redondante pour garantir la continuité d'activité même en cas de panne matérielle d'un serveur.*
+## OFFRE 3 : PREMIUM (PRA AUTOMATISÉ) - *Architecture Miroir*
+*La continuité totale. Les deux sites sont des miroirs l'un de l'autre. En cas de panne majeure à Pessac, Strasbourg redémarre la prod en quelques minutes.*
 
-### Architecture Technique
-*   **Réseau :** Identique Offre 1 & 2.
-*   **Sécurité Endpoint :** Identique Offre 2 (FortiClient EDR/ZTNA complet).
-*   **Serveurs Calcul :** **2x** Serveurs **HPE DL380 Gen11** (Cluster) - **Xeon Platinum**, **128Go RAM**, **Full NVMe**.
-    *   **Stockage par nœud :** 2x SSD NVMe 1.92TB (RAID 1).
-    *   Permet la réplication des VMs. Si le Serveur 1 tombe, le Serveur 2 prend le relais.
-*   **Serveur Stockage :** 1x Serveur TrueNAS Enterprise (Double contrôleur ou ZFS Mirroring robuste).
-    *   **Disques :** 6x SSD SATA 4TB (RAIDZ2 - Double parité) - Capacité utile : ~15TB.
-*   **Sauvegarde externe :** Ajout d'un NAS tiers ou Cloud S3 pour externalisation des backups (Règle 3-2-1).
+### Architecture Haute Dispo
+*   **Réseau :** Idem Offre 1 & 2.
+*   **Serveurs :** Architecture identique à l'Offre 2 (2x HPE DL380) mais configuration **Cluster Étendu (Disaster Recovery)**.
+*   **Stockage :** 2x **TrueNAS Enterprise** (Haute Perf) avec réplication ZFS temps réel.
+*   **Mécanisme :**
+    *   Les VMs critiques (ERP, Web) tournent à Pessac et sont répliquées toutes les 15min vers Strasbourg.
+    *   XOA est configuré pour un **Failover Automatique** (ou en 1 clic).
 
 ### Prestations incluses
-*   Configuration Haute Disponibilité (HA) dans XCP-ng/XOA.
-*   Plan de Reprise d'Activité (PRA) : Tests de basculement.
-*   Sécurisation avancée (Segmentation fine, IPS/IDS sur FortiGate).
+*   Tests de bascule réels (Coupure lien Pessac -> Démarrage Strasbourg).
+*   Documentation PRA complète.
 
-### Budget Estimatif (Hors Maintenance)
+### Budget Estimatif
 | Poste | Détail | Prix HT |
 | :--- | :--- | :--- |
-| Matériel Réseau | Pack Fortinet (Gate, 2x Switchs, 4x APs) | 5 500 € |
-| Licence Sécurité | FortiGate UTP + FortiClient EDR/ZTNA (50 users) | 2 500 € /an |
-| Nom de Domaine | nova-solar.fr (Cloudflare) | 15 € /an |
-| Cluster Calcul | 2x HPE DL380 Gen11 (Xeon Platinum) | 25 000 € |
-| Stockage & Save | TrueNAS Enterprise (Full Flash) + Backup ext | 4 500 € |
-| Main d'œuvre | Config Cluster HA & PRA (6 jours) | 3 600 € |
-| **TOTAL PROJET (Investissement)** | | **38 600 € HT** |
-| **COÛT ANNUEL (Récurrent)** | *Licences + Domaine* | **2 515 € HT /an** |
-
-**✅ Avantages :** Résilience maximale, maintenance sans interruption de service (migration des VMs à chaud).
+| Matériel Réseau | Pack Multi-site complet | 14 500 € |
+| Licences Sécurité | 2x Gate + 100x FortiClient EDR/ZTNA | 4 500 € /an |
+| Serveurs Calcul | 2x HPE DL380 Gen11 (Optimisés PRA) | 25 000 € |
+| Stockage Enterprise | 2x TrueNAS Enterprise ZFS Repl. | 9 000 € |
+| Main d'œuvre | Config PRA & Tests Bascule (10 jours) | 6 000 € |
+| **TOTAL PROJET** | | **63 000 € HT** |
+| **COÛT ANNUEL** | *Licences (100 users)* | **4 500 € HT /an** |
+| | *Abonnement Fibre Orange (2 sites)* | **1 200 € HT /an** |
 
 ---
 
-## OPTIONS DE MAINTENANCE (INFOGÉRANCE)
-
-### Option A : CONTRAT "ESSENTIEL" (Standard)
-*Pour une gestion proactive de l'infrastructure, sans le support utilisateur illimité.*
-*   **Supervision :** Monitoring des liens et serveurs (Alerte si panne).
-*   **Astreinte :** Intervention 24/7 en cas d'arrêt critique de production.
-*   **Mises à jour :** Patchs de sécurité critiques (Firewall & Serveurs) 1x/mois.
-*   **Sauvegardes :** Vérification quotidienne des rapports de backup.
-*   **Support :** 
-    *   Intervention sur panne infrastructure : Incluse (J+1).
-    *   Support utilisateur : Facturé au ticket ou pack d'heures.
-*   **Tarif mensuel : 450 € HT / mois** (5 400€ HT annuel)
-
-### Option B : CONTRAT "SÉRÉNITÉ" (Premium 24/7)
-*La DSI externalisée complète. Idéal pour votre exigence de continuité.*
-*   **Tout inclus Option A +**
-*   **Maintien en Condition Opérationnelle (MCO) :** Mises à jour proactives et optimisations.
-*   **Support Utilisateur :** Helpdesk **ILLIMITÉ** 8h-18h pour les 50 collaborateurs.
-*   **Astreinte :** Intervention 24/7 en cas d'arrêt critique de production.
-*   **Rapport mensuel :** État du parc, cybersécurité, capacity planning.
-*   **Tarif mensuel : 950 € HT / mois** (/11 500€ HT annuel)
+## INFOGÉRANCE GLOBALE (Multi-Sites)
+**Option B (Retenue) : CONTRAT "SÉRÉNITÉ" (Premium 24/7)**
+*   Supervision des 2 sites + Tunnels VPN.
+*   Support Utilisateur Illimité (100 collaborateurs).
+*   Gestion des sauvegardes croisées et tests de restauration annuels.
+*   **Tarif mensuel : 1 650 € HT / mois** (Env. 19 800 € / an)
