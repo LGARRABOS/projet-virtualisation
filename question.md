@@ -10,7 +10,7 @@ boite de 50 persone qui font du photovoltaique, prohjet de centrale solaire, bcp
 Oui pour les accés aux applications specifiques (dossier RH, compta, bureau d'etude etc...)
 - [ ] **Mobilité :** Avez-vous besoin d'accès à distance (Télétravail, VPN) ou tout se fait-il au bureau 
 Télétravail a 2 jours par semaine. VPN necessaire pour acces au data et les chantiers.
-(License forti ou autre firewall) 50 license stable augumentation a X2 dans 5/10 ans. (deuxieme site a strasbourg)
+(License forti ou autre firewall) 50 license stable augumentation a X2 dans 5/10 ans. deuxieme site a strasbourg qui ouvre apres le démanégement 
  
 ### 2. Audit de l'existant (Migration & Compatibilité)
 *Objectif : Identifier les risques et le matériel récupérable.*
@@ -53,3 +53,5 @@ XCP NG + XOA pour la visu du boss et la simplicité d'interface
 $$$$ 
 ---
 *Rappel pour l'entretien : Le client n'est pas technique. Éviter le jargon (VLAN, Hyperviseur, Snapshot) et parler "Usages" et "Besoins".*
+``
+

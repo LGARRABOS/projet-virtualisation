@@ -116,12 +116,18 @@ packages:
   - git
 
 runcmd:
+  # Disable SELinux
+  - setenforce 0
+  - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+  - firewall-cmd --permanent --add-port=80/tcp
+  - firewall-cmd --permanent --add-port=80/udp
+  - firewall-cmd --reload
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
   - nmcli c reload
   - nmcli c up enX0
   - systemctl enable --now nginx
   # Config simple reverse proxy (exemple)
-  - echo 'server { listen 80; server_name nova-solar.fr; location / { proxy_pass http://10.200.0.200:80; } }' > /etc/nginx/conf.d/reverse.conf
+  - echo 'server { listen 80; server_name cours.hostaria.cloud; location / { proxy_pass http://10.200.0.200:80; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; } }' > /etc/nginx/conf.d/reverse.conf
   - systemctl restart nginx
 EOF
 }
@@ -198,8 +204,7 @@ write_files:
           ports:
             - "80:80"
           restart: always
-          deploy:
-            replicas: 3
+        
           environment:
             WORDPRESS_DB_HOST: db:3306
             WORDPRESS_DB_USER: wordpress
@@ -209,6 +214,9 @@ write_files:
         db_data:
 
 runcmd:
+  # Disable SELinux
+  - setenforce 0
+  - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   # Config Réseau
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
   - nmcli c reload
@@ -304,85 +312,108 @@ write_files:
   # 2. Patchmon (Gestion Patchs)
   - path: /opt/patchmon/docker-compose.yml
     content: |
-      version: '3.8'
+      name: patchmon
 
       services:
         database:
           image: postgres:17-alpine
-          container_name: patchmon-postgres
           restart: unless-stopped
           environment:
             POSTGRES_DB: patchmon_db
             POSTGRES_USER: patchmon_user
-            POSTGRES_PASSWORD: password_fort_db # À CHANGER
+            POSTGRES_PASSWORD: StrongDBPassword123! # Mot de passe DB
           volumes:
             - postgres_data:/var/lib/postgresql/data
           networks:
             - patchmon-internal
           healthcheck:
             test: ["CMD-SHELL", "pg_isready -U patchmon_user -d patchmon_db"]
-            interval: 10s
+            interval: 3s
             timeout: 5s
-            retries: 5
+            retries: 7
 
         redis:
           image: redis:7-alpine
-          container_name: patchmon-redis
           restart: unless-stopped
-          command: redis-server --requirepass password_fort_redis # À CHANGER
+          command: redis-server --requirepass StrongRedisPassword456! # Mot de passe Redis
+          volumes:
+            - redis_data:/data
           networks:
             - patchmon-internal
+          healthcheck:
+            test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "StrongRedisPassword456!", "ping"]
+            interval: 3s
+            timeout: 5s
+            retries: 7
 
         backend:
           image: ghcr.io/patchmon/patchmon-backend:latest
-          container_name: patchmon-backend
           restart: unless-stopped
+          environment:
+            LOG_LEVEL: info
+            DATABASE_URL: postgresql://patchmon_user:StrongDBPassword123!@database:5432/patchmon_db
+            JWT_SECRET: 7f8e9d1c2b3a4f5e6d7c8b9a0f1e2d3c4b5a6f7e8d9c0b1a2f3e4d5c6b7a8f9 # Secret JWT généré
+            SERVER_PROTOCOL: http
+            SERVER_HOST: 10.200.0.199 # IP de la VM Monitoring
+            SERVER_PORT: 3000
+            CORS_ORIGIN: http://10.200.0.199:3000
+            # Database Connection Pool
+            DB_CONNECTION_LIMIT: 30
+            DB_POOL_TIMEOUT: 20
+            DB_CONNECT_TIMEOUT: 10
+            DB_IDLE_TIMEOUT: 300
+            DB_MAX_LIFETIME: 1800
+            # Rate Limiting
+            RATE_LIMIT_WINDOW_MS: 900000
+            RATE_LIMIT_MAX: 5000
+            AUTH_RATE_LIMIT_WINDOW_MS: 600000
+            AUTH_RATE_LIMIT_MAX: 500
+            AGENT_RATE_LIMIT_WINDOW_MS: 60000
+            AGENT_RATE_LIMIT_MAX: 1000
+            # Redis Configuration
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            REDIS_PASSWORD: StrongRedisPassword456!
+            REDIS_DB: 0
+            ASSETS_DIR: /app/assets
+          volumes:
+            - agent_files:/app/agents
+            - branding_assets:/app/assets
+          networks:
+            - patchmon-internal
           depends_on:
             database:
               condition: service_healthy
             redis:
-              condition: service_started
-          environment:
-            # Configuration DB
-            DB_HOST: database
-            DB_PORT: 5432
-            DB_NAME: patchmon_db
-            DB_USER: patchmon_user
-            DB_PASSWORD: password_fort_db # Doit correspondre à la DB
-            # Configuration Redis
-            REDIS_HOST: redis
-            REDIS_PORT: 6379
-            REDIS_PASSWORD: password_fort_redis # Doit correspondre à Redis
-            # Sécurité
-            JWT_SECRET: secret_jwt_tres_long # À CHANGER (clé aléatoire)
-            # URL de l'instance
-            SERVER_PROTOCOL: http # ou https
-            SERVER_HOST: 10.200.0.199 # IP de la VM
-            SERVER_PORT: 4000
-          networks:
-            - patchmon-internal
+              condition: service_healthy
 
         frontend:
           image: ghcr.io/patchmon/patchmon-frontend:latest
-          container_name: patchmon-frontend
           restart: unless-stopped
           ports:
             - "3000:3000"
-          depends_on:
-            - backend
-          environment:
-            BACKEND_URL: http://backend:4000 # Communication interne
+          volumes:
+            - branding_assets:/usr/share/nginx/html/assets
           networks:
             - patchmon-internal
+          depends_on:
+            backend:
+              condition: service_healthy
+
+      volumes:
+        postgres_data:
+        redis_data:
+        agent_files:
+        branding_assets:
 
       networks:
         patchmon-internal:
           driver: bridge
 
-      volumes:
-        postgres_data:
-
 runcmd:
+  # Disable SELinux
+  - setenforce 0
+  - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   # Config Réseau
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
   - nmcli c reload

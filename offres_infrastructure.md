@@ -15,7 +15,7 @@
 
 ## CONNECTIVITÉ TRÈS HAUT DÉBIT (Option Opérateur)
 *Offre recommandée : Orange Business ou Bouygues Telecom Entreprises*
-*   **Technologie :** Fibre Pro XGS-PON (Débit jusqu'à 8 Gb/s).
+*   **Technologie :** Fibre Pro Orange Business (Débit jusqu'à 8 Gb/s).
 *   **Sites :** 1 lien pour Pessac + 1 lien pour Strasbourg.
 *   **Adresse IP :** IP Fixe incluse (indispensable pour les VPNs).
 *   **Coût Estimatif :** **50 € HT / mois / site** (soit 100 € HT / mois total).
