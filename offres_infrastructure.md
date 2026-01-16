@@ -21,7 +21,7 @@
 *   **Coût Estimatif :** **50 € HT / mois / site** (soit 100 € HT / mois total).
 *   *Frais de raccordement (FAS) : Offerts sur engagement 36 mois.*
 
----
+---git
 
 ## DÉTAIL DES ACCESSOIRES & ENVIRONNEMENT (Inclus dans les offres)
 *Pour garantir une installation professionnelle et pérenne.*
