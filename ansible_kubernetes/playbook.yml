@@ -1,0 +1,12 @@
+---
+- name: Install RKE2 master
+  hosts: masters
+  become: yes
+  roles:
+    - install_rke2_master
+
+- name: Install RKE2 agent
+  hosts: workers
+  become: yes
+  roles:
+    - install_rke2_agent

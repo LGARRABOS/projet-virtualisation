@@ -1,0 +1,5 @@
+ansible_host: kube-worker-2
+ansible_user: user
+ansible_become_password: Coucouleroot1234
+
+rke2_role: worker

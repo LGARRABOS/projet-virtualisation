@@ -1,0 +1,44 @@
+- name: Install curl
+  become: true
+  ansible.builtin.package:
+    name: curl
+    state: present
+
+- name: Check if RKE2 is already installed
+  become: true
+  stat:
+    path: /usr/local/bin/rke2
+  register: rke2_installed
+
+- name: Install RKE2 agent
+  become: true
+  shell: curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=agent sh -
+  when: not rke2_installed.stat.exists
+  changed_when: true
+
+- name: Ensure RKE2 config directory exists
+  become: true
+  file:
+    path: /etc/rancher/rke2
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create RKE2 config
+  become: true
+  copy:
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      server: https://{{ hostvars['kube-master-1'].ansible_host }}:9345
+      token: {{ hostvars['kube-master-1'].rke2_server_token }}
+
+- name: Enable and start rke2-agent
+  become: true
+  systemd:
+    name: rke2-agent
+    enabled: true
+    state: started

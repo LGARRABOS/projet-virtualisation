@@ -1,1 +1,6 @@
 2025-07-28_-_MSPR_-_Sujet_apprenant.pdf
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
