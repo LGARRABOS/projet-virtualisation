@@ -88,7 +88,7 @@ resource "xenorchestra_vm" "reverse_proxy" {
 hostname: srv-rp-nginx-01
 users:
   - name: admin-sys
-    password: cometuveuxmechein
+    password: commetuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
@@ -126,6 +126,10 @@ runcmd:
   - firewall-cmd --permanent --add-port=80/udp
   - firewall-cmd --reload
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli connection delete "System enX0" || true
+  - nmcli connection delete "Wired connection 1" || true
+  
+  # On active ta configuration propre
   - nmcli c reload
   - nmcli c up enX0
   - systemctl enable --now nginx
@@ -161,7 +165,7 @@ resource "xenorchestra_vm" "wordpress_app" {
 hostname: srv-app-wp-01
 users:
   - name: admin-sys
-    password: cometuveuxmechein
+    password: commetuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
@@ -223,6 +227,10 @@ runcmd:
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   # Config Réseau
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli connection delete "System enX0" || true
+  - nmcli connection delete "Wired connection 1" || true
+  
+  # On active ta configuration propre
   - nmcli c reload
   - nmcli c up enX0
   
@@ -262,7 +270,7 @@ resource "xenorchestra_vm" "monitoring" {
 hostname: srv-monit-01
 users:
   - name: admin-sys
-    password: cometuveuxmechein
+    password: commetuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
@@ -285,6 +293,7 @@ write_files:
       
       [ipv6]
       method=ignore
+
   
   # 1. Netdata (Monitoring)
   - path: /opt/netdata/docker-compose.yml
@@ -421,6 +430,10 @@ runcmd:
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   # Config Réseau
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli connection delete "System enX0" || true
+  - nmcli connection delete "Wired connection 1" || true
+  
+  # On active ta configuration propre
   - nmcli c reload
   - nmcli c up enX0
   
@@ -463,12 +476,16 @@ resource "xenorchestra_vm" "kube-master-1" {
 hostname: master-1
 users:
   - name: admin-sys
-    password: cometuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL8fEzs9QTcGOAl62I/QF5wWy6bCvdhdEknxUuBHedE2PNgT5zhgIu0qZUDqHElLUF22SXrAwbDdQYUrLJNndYblBg1B4Pj4sakkxDne0X56YEuANcS6CNieyTZZcUW0d/iaNbinKACZbcFIFNa+GvDwPMcco2GIBiQenPlrcGBH3gLX/vlX3rTH0fvoAo2B1PMvxhls8XADCUOFEU5HTKPMDdsX5wxgmqT7Ukbmz9rFUfCvyPUoDESaBi3y8UhWmZH1VeSsYyF8l9IGngLvUnyQKzSqnH0ysgwTIfmz/5ARW8DCAdPeCMkqvu7qQCd0JjBPhLjeF713GFNanR81bG2r+jecThlIC5pt6WZTxtqSyPtAguhcwmYNfj5gGbkqtiT/R6zcTIqoW1N6KrwQCRuDZkDDB0ILpyDPh8E/VJBTAccLDlJ0V69jUUnpgTwgSijW/wXuGxzH5riN2TjTBqR8Aci7jAWdy3hAVs7Rb3rhwVyWhXw1//uTxm4DUDDRM= dreasy@Maxou-9.local
+
+chpasswd:
+  list: |
+    admin-sys:commetuveuxmechein
+  expire: false
 
 write_files:
   - path: /etc/NetworkManager/system-connections/enX0.nmconnection
@@ -489,6 +506,10 @@ runcmd:
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli connection delete "System enX0" || true
+  - nmcli connection delete "Wired connection 1" || true
+  
+  # On active ta configuration propre
   - nmcli c reload
   - nmcli c up enX0
 EOF
@@ -517,15 +538,19 @@ resource "xenorchestra_vm" "kube-worker-1" {
 
   cloud_config = <<EOF
 #cloud-config
-hostname: worker-1
+hostname: kube-worker-1
 users:
-  - name: admin-sys 
-    password: cometuveuxmechein
+  - name: admin-sys
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL8fEzs9QTcGOAl62I/QF5wWy6bCvdhdEknxUuBHedE2PNgT5zhgIu0qZUDqHElLUF22SXrAwbDdQYUrLJNndYblBg1B4Pj4sakkxDne0X56YEuANcS6CNieyTZZcUW0d/iaNbinKACZbcFIFNa+GvDwPMcco2GIBiQenPlrcGBH3gLX/vlX3rTH0fvoAo2B1PMvxhls8XADCUOFEU5HTKPMDdsX5wxgmqT7Ukbmz9rFUfCvyPUoDESaBi3y8UhWmZH1VeSsYyF8l9IGngLvUnyQKzSqnH0ysgwTIfmz/5ARW8DCAdPeCMkqvu7qQCd0JjBPhLjeF713GFNanR81bG2r+jecThlIC5pt6WZTxtqSyPtAguhcwmYNfj5gGbkqtiT/R6zcTIqoW1N6KrwQCRuDZkDDB0ILpyDPh8E/VJBTAccLDlJ0V69jUUnpgTwgSijW/wXuGxzH5riN2TjTBqR8Aci7jAWdy3hAVs7Rb3rhwVyWhXw1//uTxm4DUDDRM= dreasy@Maxou-9.local
+
+chpasswd:
+  list: |
+    admin-sys:commetuveuxmechein
+  expire: false
 
 write_files:
   - path: /etc/NetworkManager/system-connections/enX0.nmconnection
@@ -546,6 +571,10 @@ runcmd:
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli connection delete "System enX0" || true
+  - nmcli connection delete "Wired connection 1" || true
+  
+  # On active ta configuration propre
   - nmcli c reload
   - nmcli c up enX0
 EOF
@@ -577,12 +606,16 @@ resource "xenorchestra_vm" "kube-worker-2" {
 hostname: worker-2
 users:
   - name: admin-sys
-    password: cometuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL8fEzs9QTcGOAl62I/QF5wWy6bCvdhdEknxUuBHedE2PNgT5zhgIu0qZUDqHElLUF22SXrAwbDdQYUrLJNndYblBg1B4Pj4sakkxDne0X56YEuANcS6CNieyTZZcUW0d/iaNbinKACZbcFIFNa+GvDwPMcco2GIBiQenPlrcGBH3gLX/vlX3rTH0fvoAo2B1PMvxhls8XADCUOFEU5HTKPMDdsX5wxgmqT7Ukbmz9rFUfCvyPUoDESaBi3y8UhWmZH1VeSsYyF8l9IGngLvUnyQKzSqnH0ysgwTIfmz/5ARW8DCAdPeCMkqvu7qQCd0JjBPhLjeF713GFNanR81bG2r+jecThlIC5pt6WZTxtqSyPtAguhcwmYNfj5gGbkqtiT/R6zcTIqoW1N6KrwQCRuDZkDDB0ILpyDPh8E/VJBTAccLDlJ0V69jUUnpgTwgSijW/wXuGxzH5riN2TjTBqR8Aci7jAWdy3hAVs7Rb3rhwVyWhXw1//uTxm4DUDDRM= dreasy@Maxou-9.local
+
+chpasswd:
+  list: |
+    admin-sys:commetuveuxmechein
+  expire: false
 
 write_files:
   - path: /etc/NetworkManager/system-connections/enX0.nmconnection
@@ -603,7 +636,11 @@ runcmd:
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
-  - nmcli c reload
+  - nmcli connection delete "System enX0" || true
+  - nmcli connection delete "Wired connection 1" || true
+  
+  # On active ta configuration propre
   - nmcli c up enX0
+  - nmcli c reload
 EOF
 }
