@@ -1,3 +1,10 @@
+- name: Stop and disable firewalld
+  become: true
+  systemd_service:
+    name: firewalld
+    enabled: false
+    state: stopped
+
 - name: Install curl
   become: true
   ansible.builtin.package:

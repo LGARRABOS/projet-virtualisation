@@ -1,3 +1,10 @@
+- name: Stop and disable firewalld
+  become: true
+  systemd_service:
+    name: firewalld
+    enabled: false
+    state: stopped
+
 - name: Install curl
   become: true
   ansible.builtin.package:
@@ -18,7 +25,7 @@
 
 - name: Enable and start rke2-server
   become: true
-  systemd:
+  systemd_service:
     name: rke2-server
     enabled: true
     state: started
