@@ -32,18 +32,20 @@ variable "network_app_id" {
   default = "82602d24-efdd-d5f0-f983-1a2d867907bb"
 }
 
+variable "affinity_host_id" {
+  description = "UUID de l'hôte XCP-ng pour affinity (format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx). Dans XOA : Pools > votre pool > Hosts > clic sur l'hôte > UUID. Ne pas entrer 'yes' ici."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", var.affinity_host_id))
+    error_message = "affinity_host_id doit être l'UUID de l'hôte (ex: a1b2c3d4-e5f6-7890-abcd-ef1234567890). Dans XOA : Pools > votre pool > Hosts > clic sur l'hôte > copier l'UUID. Ne pas entrer 'yes' (réserver pour la confirmation du plan)."
+  }
+}
+
 variable "template_rocky" {
-  default = "a00108b8-aac6-5f74-fe01-b25760ff2034"
-}
-
-variable "pool_id" {
-  description = "838d0c46-b7a9-85e4-0c71-3c3a3f57dd84"
-  default = "838d0c46-b7a9-85e4-0c71-3c3a3f57dd84" # Laisser vide pour auto-détection, ou mettre l'UUID du pool
-}
-
-# Récupérer un hôte du pool pour l'affinité
-data "xenorchestra_hosts" "hosts" {
-  pool_id = var.pool_id
+  description = "UUID du template Rocky Linux (XOA > Templates)"
+  type        = string
+  default     = "a00108b8-aac6-5f74-fe01-b25760ff2034"
 }
 
 # Générer des MAC addresses pour les interfaces réseau (format 02:XX:XX:XX:XX:XX)
@@ -67,8 +69,8 @@ resource "xenorchestra_vm" "reverse_proxy" {
   name_label = "SRV-RP-NGINX-01"
   name_description = "Reverse Proxy Nginx - 10.199.0.200"
   template   = var.template_rocky
-  affinity_host = data.xenorchestra_hosts.hosts.hosts[0].id
   hvm_boot_firmware = "uefi" # Force le démarrage en UEFI (indispensable pour Rocky 9 récent)
+  affinity_host = var.affinity_host_id
 
   network {
     network_id = var.network_dmz_id
@@ -86,6 +88,7 @@ resource "xenorchestra_vm" "reverse_proxy" {
 hostname: srv-rp-nginx-01
 users:
   - name: admin-sys
+    password: cometuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
@@ -139,8 +142,8 @@ resource "xenorchestra_vm" "wordpress_app" {
   name_label = "SRV-APP-WP-01"
   name_description = "WordPress Docker - 10.100.0.200"
   template   = var.template_rocky
-  affinity_host = data.xenorchestra_hosts.hosts.hosts[0].id
   hvm_boot_firmware = "uefi" # Force le démarrage en UEFI (indispensable pour Rocky 9 récent)
+  affinity_host = var.affinity_host_id
 
   network {
     network_id = var.network_app_id
@@ -158,6 +161,7 @@ resource "xenorchestra_vm" "wordpress_app" {
 hostname: srv-app-wp-01
 users:
   - name: admin-sys
+    password: cometuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
@@ -239,8 +243,8 @@ resource "xenorchestra_vm" "monitoring" {
   name_label = "SRV-MONIT-01"
   name_description = "Netdata & Patchmon - 10.200.0.199"
   template   = var.template_rocky
-  affinity_host = data.xenorchestra_hosts.hosts.hosts[0].id
   hvm_boot_firmware = "uefi" # Force le démarrage en UEFI (indispensable pour Rocky 9 récent)
+  affinity_host = var.affinity_host_id
 
   network {
     network_id = var.network_app_id
@@ -258,6 +262,7 @@ resource "xenorchestra_vm" "monitoring" {
 hostname: srv-monit-01
 users:
   - name: admin-sys
+    password: cometuveuxmechein
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: wheel
     shell: /bin/bash
@@ -429,5 +434,176 @@ runcmd:
   
   # Lancement Patchmon
   - cd /opt/patchmon && docker compose up -d
+EOF
+}
+
+# --- 4. VM MASTER-1 (sans installation) ---
+resource "xenorchestra_vm" "kube-master-1" {
+  memory_max = 6710886400 # 6GB
+  cpus       = 4
+  name_label = "SRV-MASTER-01"
+  name_description = "Master-1 - 10.200.0.201"
+  template   = var.template_rocky
+  hvm_boot_firmware = "uefi"
+  affinity_host = var.affinity_host_id
+
+  network {
+    network_id = var.network_app_id
+    mac_address = "02:00:00:00:00:04"
+  }
+
+  disk {
+    sr_id      = var.sr_id
+    name_label = "Rocky Linuaqwf"
+    size       = 32212254720 # 30GB
+  }
+
+  cloud_config = <<EOF
+#cloud-config
+hostname: master-1
+users:
+  - name: admin-sys
+    password: cometuveuxmechein
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: wheel
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL8fEzs9QTcGOAl62I/QF5wWy6bCvdhdEknxUuBHedE2PNgT5zhgIu0qZUDqHElLUF22SXrAwbDdQYUrLJNndYblBg1B4Pj4sakkxDne0X56YEuANcS6CNieyTZZcUW0d/iaNbinKACZbcFIFNa+GvDwPMcco2GIBiQenPlrcGBH3gLX/vlX3rTH0fvoAo2B1PMvxhls8XADCUOFEU5HTKPMDdsX5wxgmqT7Ukbmz9rFUfCvyPUoDESaBi3y8UhWmZH1VeSsYyF8l9IGngLvUnyQKzSqnH0ysgwTIfmz/5ARW8DCAdPeCMkqvu7qQCd0JjBPhLjeF713GFNanR81bG2r+jecThlIC5pt6WZTxtqSyPtAguhcwmYNfj5gGbkqtiT/R6zcTIqoW1N6KrwQCRuDZkDDB0ILpyDPh8E/VJBTAccLDlJ0V69jUUnpgTwgSijW/wXuGxzH5riN2TjTBqR8Aci7jAWdy3hAVs7Rb3rhwVyWhXw1//uTxm4DUDDRM= dreasy@Maxou-9.local
+
+write_files:
+  - path: /etc/NetworkManager/system-connections/enX0.nmconnection
+    permissions: '0600'
+    content: |
+      [connection]
+      id=enX0
+      type=ethernet
+      interface-name=enX0
+      [ipv4]
+      method=manual
+      address1=10.200.0.201/24,10.200.0.254
+      dns=1.1.1.1;
+      [ipv6]
+      method=ignore
+
+runcmd:
+  - setenforce 0
+  - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+  - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli c reload
+  - nmcli c up enX0
+EOF
+}
+
+# --- 5. VM WORKER-1 (sans installation) ---
+resource "xenorchestra_vm" "kube-worker-1" {
+  memory_max = 2147483648 # 2GB
+  cpus       = 2
+  name_label = "SRV-WORKER-01"
+  name_description = "Worker-1 - 10.200.0.202"
+  template   = var.template_rocky
+  hvm_boot_firmware = "uefi"
+  affinity_host = var.affinity_host_id
+
+  network {
+    network_id = var.network_app_id
+    mac_address = "02:00:00:00:00:05"
+  }
+
+  disk {
+    sr_id      = var.sr_id
+    name_label = "Rocky Linuaqwf"
+    size       = 32212254720 # 30GB
+  }
+
+  cloud_config = <<EOF
+#cloud-config
+hostname: worker-1
+users:
+  - name: admin-sys 
+    password: cometuveuxmechein
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: wheel
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL8fEzs9QTcGOAl62I/QF5wWy6bCvdhdEknxUuBHedE2PNgT5zhgIu0qZUDqHElLUF22SXrAwbDdQYUrLJNndYblBg1B4Pj4sakkxDne0X56YEuANcS6CNieyTZZcUW0d/iaNbinKACZbcFIFNa+GvDwPMcco2GIBiQenPlrcGBH3gLX/vlX3rTH0fvoAo2B1PMvxhls8XADCUOFEU5HTKPMDdsX5wxgmqT7Ukbmz9rFUfCvyPUoDESaBi3y8UhWmZH1VeSsYyF8l9IGngLvUnyQKzSqnH0ysgwTIfmz/5ARW8DCAdPeCMkqvu7qQCd0JjBPhLjeF713GFNanR81bG2r+jecThlIC5pt6WZTxtqSyPtAguhcwmYNfj5gGbkqtiT/R6zcTIqoW1N6KrwQCRuDZkDDB0ILpyDPh8E/VJBTAccLDlJ0V69jUUnpgTwgSijW/wXuGxzH5riN2TjTBqR8Aci7jAWdy3hAVs7Rb3rhwVyWhXw1//uTxm4DUDDRM= dreasy@Maxou-9.local
+
+write_files:
+  - path: /etc/NetworkManager/system-connections/enX0.nmconnection
+    permissions: '0600'
+    content: |
+      [connection]
+      id=enX0
+      type=ethernet
+      interface-name=enX0
+      [ipv4]
+      method=manual
+      address1=10.200.0.202/24,10.200.0.254
+      dns=1.1.1.1;
+      [ipv6]
+      method=ignore
+
+runcmd:
+  - setenforce 0
+  - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+  - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli c reload
+  - nmcli c up enX0
+EOF
+}
+
+# --- 6. VM WORKER-2 (sans installation) ---
+resource "xenorchestra_vm" "kube-worker-2" {
+  memory_max = 2147483648 # 2GB
+  cpus       = 2
+  name_label = "SRV-WORKER-02"
+  name_description = "Worker-2 - 10.200.0.203"
+  template   = var.template_rocky
+  hvm_boot_firmware = "uefi"
+  affinity_host = var.affinity_host_id
+
+  network {
+    network_id = var.network_app_id
+    mac_address = "02:00:00:00:00:06"
+  }
+
+  disk {
+    sr_id      = var.sr_id
+    name_label = "Rocky Linuaqwf"
+    size       = 32212254720 # 30GB
+  }
+
+  cloud_config = <<EOF
+#cloud-config
+hostname: worker-2
+users:
+  - name: admin-sys
+    password: cometuveuxmechein
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: wheel
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL8fEzs9QTcGOAl62I/QF5wWy6bCvdhdEknxUuBHedE2PNgT5zhgIu0qZUDqHElLUF22SXrAwbDdQYUrLJNndYblBg1B4Pj4sakkxDne0X56YEuANcS6CNieyTZZcUW0d/iaNbinKACZbcFIFNa+GvDwPMcco2GIBiQenPlrcGBH3gLX/vlX3rTH0fvoAo2B1PMvxhls8XADCUOFEU5HTKPMDdsX5wxgmqT7Ukbmz9rFUfCvyPUoDESaBi3y8UhWmZH1VeSsYyF8l9IGngLvUnyQKzSqnH0ysgwTIfmz/5ARW8DCAdPeCMkqvu7qQCd0JjBPhLjeF713GFNanR81bG2r+jecThlIC5pt6WZTxtqSyPtAguhcwmYNfj5gGbkqtiT/R6zcTIqoW1N6KrwQCRuDZkDDB0ILpyDPh8E/VJBTAccLDlJ0V69jUUnpgTwgSijW/wXuGxzH5riN2TjTBqR8Aci7jAWdy3hAVs7Rb3rhwVyWhXw1//uTxm4DUDDRM= dreasy@Maxou-9.local
+
+write_files:
+  - path: /etc/NetworkManager/system-connections/enX0.nmconnection
+    permissions: '0600'
+    content: |
+      [connection]
+      id=enX0
+      type=ethernet
+      interface-name=enX0
+      [ipv4]
+      method=manual
+      address1=10.200.0.203/24,10.200.0.254
+      dns=1.1.1.1;
+      [ipv6]
+      method=ignore
+
+runcmd:
+  - setenforce 0
+  - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+  - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
+  - nmcli c reload
+  - nmcli c up enX0
 EOF
 }

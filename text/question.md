@@ -55,3 +55,6 @@ $$$$
 *Rappel pour l'entretien : Le client n'est pas technique. Éviter le jargon (VLAN, Hyperviseur, Snapshot) et parler "Usages" et "Besoins".*
 ``
 
+
+ajouter cluster kube pour l'app panneau solaire 
+pull des milliers de donnée 1 fois par jours, + pull des données des capteurs solaires quand le user se connecte sur son interface pour avoir de l'instantané des données. 

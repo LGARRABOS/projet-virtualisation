@@ -1,4 +1,4 @@
-ansible_host: kube-worker-1
+ansible_host: 10.200.0.202
 ansible_user: admin-sys
 
 rke2_role: worker

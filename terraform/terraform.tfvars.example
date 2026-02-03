@@ -1,0 +1,12 @@
+# Copier en terraform.tfvars et renseigner les valeurs de VOTRE XOA
+# cp terraform.tfvars.example terraform.tfvars
+
+# UUID de l'hôte pour affinity (format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+# XOA > Pools > votre pool > Hosts > clic sur l'hôte > copier l'UUID (ne pas mettre "yes" ici)
+affinity_host_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# Optionnel : template, SR, réseaux
+# template_rocky = "uuid-du-template-rocky"
+# sr_id          = "uuid-du-storage-repository"
+# network_dmz_id = "uuid-reseau-dmz"
+# network_app_id = "uuid-reseau-app"
