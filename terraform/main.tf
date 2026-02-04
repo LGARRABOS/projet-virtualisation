@@ -86,6 +86,7 @@ resource "xenorchestra_vm" "reverse_proxy" {
   cloud_config = <<EOF
 #cloud-config
 hostname: srv-rp-nginx-01
+
 users:
   - name: admin-sys
     password: commetuveuxmechein
@@ -119,6 +120,8 @@ packages:
   - git
 
 runcmd:
+  - echo "srv-rp-nginx-01" > /etc/hostname
+  - hostnamectl set-hostname srv-rp-nginx-01
   # Disable SELinux
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
@@ -163,6 +166,7 @@ resource "xenorchestra_vm" "wordpress_app" {
   cloud_config = <<EOF
 #cloud-config
 hostname: srv-app-wp-01
+
 users:
   - name: admin-sys
     password: commetuveuxmechein
@@ -222,6 +226,8 @@ write_files:
         db_data:
 
 runcmd:
+  - echo "srv-app-wp-01" > /etc/hostname
+  - hostnamectl set-hostname srv-app-wp-01
   # Disable SELinux
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
@@ -268,6 +274,7 @@ resource "xenorchestra_vm" "monitoring" {
   cloud_config = <<EOF
 #cloud-config
 hostname: srv-monit-01
+
 users:
   - name: admin-sys
     password: commetuveuxmechein
@@ -425,6 +432,8 @@ write_files:
           driver: bridge
 
 runcmd:
+  - echo "srv-monit-01" > /etc/hostname
+  - hostnamectl set-hostname srv-monit-01
   # Disable SELinux
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
@@ -474,6 +483,7 @@ resource "xenorchestra_vm" "kube-master-1" {
   cloud_config = <<EOF
 #cloud-config
 hostname: master-1
+
 users:
   - name: admin-sys
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
@@ -503,6 +513,8 @@ write_files:
       method=ignore
 
 runcmd:
+  - echo "kube-master-1" > /etc/hostname
+  - hostnamectl set-hostname kube-master-1
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
@@ -517,7 +529,7 @@ EOF
 
 # --- 5. VM WORKER-1 (sans installation) ---
 resource "xenorchestra_vm" "kube-worker-1" {
-  memory_max = 2147483648 # 2GB
+  memory_max = 4294967296 #4GB
   cpus       = 2
   name_label = "SRV-WORKER-01"
   name_description = "Worker-1 - 10.200.0.202"
@@ -539,6 +551,7 @@ resource "xenorchestra_vm" "kube-worker-1" {
   cloud_config = <<EOF
 #cloud-config
 hostname: kube-worker-1
+
 users:
   - name: admin-sys
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
@@ -568,6 +581,8 @@ write_files:
       method=ignore
 
 runcmd:
+  - echo "kube-worker-1" > /etc/hostname
+  - hostnamectl set-hostname kube-worker-1
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
@@ -582,7 +597,7 @@ EOF
 
 # --- 6. VM WORKER-2 (sans installation) ---
 resource "xenorchestra_vm" "kube-worker-2" {
-  memory_max = 2147483648 # 2GB
+  memory_max = 4294967296 #4GB
   cpus       = 2
   name_label = "SRV-WORKER-02"
   name_description = "Worker-2 - 10.200.0.203"
@@ -604,6 +619,7 @@ resource "xenorchestra_vm" "kube-worker-2" {
   cloud_config = <<EOF
 #cloud-config
 hostname: worker-2
+
 users:
   - name: admin-sys
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
@@ -633,6 +649,8 @@ write_files:
       method=ignore
 
 runcmd:
+  - echo "kube-worker-2" > /etc/hostname
+  - hostnamectl set-hostname kube-worker-2
   - setenforce 0
   - sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
   - chmod 600 /etc/NetworkManager/system-connections/enX0.nmconnection
