@@ -1,111 +1,113 @@
-# Projet Virtualisation – Réponse à la demande INFRA-PME-2026
+# Projet Virtualisation – Infrastructure IT PME
 
-Ce dépôt présente la **réponse apportée à une demande de refonte d’infrastructure IT** pour une PME en croissance, dans un contexte de **déménagement**, de **sécurisation du SI** et de **continuité d’activité**.
-
-La réponse s’articule autour de **trois offres distinctes**, permettant à la direction de choisir une solution adaptée à ses **contraintes budgétaires**, à son **niveau de maturité IT** et à ses **objectifs de sécurité**.
+Réponse à une demande de **refonte d'infrastructure IT** pour une PME du secteur photovoltaïque, dans un contexte de déménagement, sécurisation du SI et continuité d'activité.
 
 ---
 
-## 1. Contexte et problématique
+## Vue d'ensemble
 
-L’entreprise concernée est une **PME du secteur photovoltaïque**, confrontée à plusieurs enjeux :
+Ce dépôt contient :
 
-- Croissance rapide de l’activité
-- Augmentation du nombre d’utilisateurs et de services
-- Infrastructure existante peu virtualisée
-- Manque de segmentation réseau
-- Sauvegardes insuffisamment maîtrisées
-- Exposition aux risques cyber
-- Besoin de continuité de service lors du déménagement
+- **Infrastructure as Code** : Terraform (déploiement VMs sur XCP-ng) et Ansible (cluster Kubernetes RKE2)
+- **Documentation** : technique, utilisateur et proposition commerciale
+- **Procédures** : déploiement, préparation des templates
 
-👉 La direction souhaite une solution :
-- fiable
-- sécurisée
-- évolutive
-- financièrement maîtrisée
+### Stack technique
 
----
-
-## 2. Démarche de réponse
-
-Plutôt que de proposer une solution unique, le choix a été fait de **structurer la réponse en trois offres** :
-
-- une offre **essentielle** pour répondre aux besoins immédiats,
-- une offre **équilibrée** apportant sécurité et automatisation,
-- une offre **avancée** orientée résilience, sécurité renforcée et pérennité.
-
-Cette approche permet une **prise de décision éclairée**, en fonction des priorités de l’entreprise.
+| Composant | Technologie |
+|-----------|-------------|
+| Virtualisation | XCP-ng, Xen Orchestra (XOA) |
+| IaC | Terraform, Ansible |
+| OS invités | Rocky Linux 9 |
+| Applications | Nginx, WordPress (Docker), Netdata, Patchmon |
+| Orchestration | RKE2 (Kubernetes) |
 
 ---
 
-## 3. Les trois offres proposées
+## Structure du projet
 
-### 🔹 Offre 1 – Infrastructure Essentielle
-
-**Objectif :** répondre au besoin minimal de virtualisation et de centralisation.
-
-Principales caractéristiques :
-- Virtualisation complète (XCP-ng)
-- Segmentation réseau par VLAN
-- Hébergement centralisé des machines virtuelles
-- Pare-feu dédié avec règles de sécurité
-- Sauvegardes basiques
-- Administration principalement manuelle
-
-👉 Offre adaptée à :
-- un budget contraint
-- une première étape vers la virtualisation
-- Pas d'achat de matériel physique supplémentaire (hors firewall)
-
----
-
-### 🔹 Offre 2 – Infrastructure Sécurisée et Automatisée
-
-**Objectif :** proposer une infrastructure fiable, sécurisée et maintenable.
-
-Principales caractéristiques :
-- Virtualisation complète (XCP-ng)
-- Segmentation réseau par VLAN
-- Pare-feu dédié avec règles de sécurité
-- Sauvegardes structurées (règle 3-2-1)
-- Déploiement automatisé via **Terraform + Cloud-Init**
-- PRA / PCA
-- Achat de matériel adapté (serveurs, stockage, firewall)
-
-👉 Offre adaptée à :
-- une PME en croissance
-- une volonté de professionnalisation du SI
+```
+projet-virtualisation/
+├── terraform/              # Déploiement des VMs sur XCP-ng
+│   ├── main.tf
+│   └── terraform.tfvars.example
+├── ansible_kubernetes/      # Installation du cluster RKE2
+│   ├── playbook.yml
+│   └── inventory/
+├── docs/                   # Documentation
+│   ├── 01-documentation-technique.md
+│   ├── 02-documentation-utilisateur.md
+│   └── 03-offres-client.md
+├── proces/                 # Procédures de déploiement
+│   ├── deploy_process.md
+│   └── preparation_template_rocky.md
+└── text/                   # Documentation métier (archive)
+```
 
 ---
 
-### 🔹 Offre 3 – Infrastructure Avancée et Résiliente
+## Démarrage rapide
 
-**Objectif :** garantir un haut niveau de disponibilité, de sécurité et de résilience.
+### Prérequis
 
-Principales caractéristiques :
-- Virtualisation redondante sur les deux sites
-- Segmentation réseau stricte
-- Sauvegardes avancées + tests de restauration
-- PRA / PCA
-- Supervision et traçabilité accrues
-- Achat de matériel redonder (serveurs, stockage, firewall)
+- XCP-ng + Xen Orchestra (XOA) opérationnels
+- Template Rocky Linux 9 avec Cloud-Init
+- Terraform et Ansible installés
 
-👉 Offre adaptée à :
-- des données sensibles
-- une exigence forte de continuité de service
+### 1. Déployer les VMs (Terraform)
+
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+# Éditer terraform.tfvars (affinity_host_id, etc.)
+terraform init
+terraform plan
+terraform apply
+```
+
+### 2. Installer le cluster RKE2 (Ansible)
+
+```bash
+cd ansible_kubernetes
+ansible-vault edit inventory/group_vars/all.yml  # Configurer ansible_become_password
+ansible-playbook -i inventory/hosts.ini --ask-vault-pass playbook.yml
+```
+
+---
+
+## Documentation
+
+| Document | Public | Description |
+|----------|--------|--------------|
+| [Documentation technique](docs/01-documentation-technique.md) | Admins, DevOps | Architecture, Terraform, Ansible, dépannage |
+| [Documentation utilisateur](docs/02-documentation-utilisateur.md) | Utilisateurs | Accès aux services (site web, VPN, monitoring) |
+| [Offres client](docs/03-offres-client.md) | Direction | Proposition commerciale, coûts, infogérance |
 
 ---
 
-## 4. Comparaison synthétique des offres
+## Les trois offres infrastructure
 
-| Critère                     | Offre 1 | Offre 2 | Offre 3 |
-|----------------------------|---------|---------|---------|
-| Virtualisation             | ✔️      | ✔️      | ✔️✔️ |
-| Segmentation réseau        | ✔️      | ✔️      | ✔️✔️ |
-| Sécurité                   | ✔️      | ✔️      | ✔️✔️ |
-| Sauvegarde 3-2-1           | ❌      | ✔️      | ✔️✔️ |
-| Automatisation (IaC)       | ❌      | ✔️      | ✔️✔️ |
-| PRA / PCA                  | ❌      | ✔️      | ✔️✔️ |
-| Évolutivité long terme     | ⚠️      | ✔️      | ✔️✔️ |
+| Offre | Objectif | Budget indicatif |
+|-------|----------|------------------|
+| **1 – Essentielle** | Virtualisation minimale, pare-feu | ~23 000 € HT |
+| **2 – Sécurisée** | IaC, sauvegardes 3-2-1, PRA/PCA | ~41 000 € HT |
+| **3 – Avancée** | Multi-sites, failover, résilience | ~63 000 € HT |
+
+*Détails complets dans [docs/03-offres-client.md](docs/03-offres-client.md).*
 
 ---
+
+## VMs déployées
+
+| Serveur | Rôle | IP |
+|--------|------|-----|
+| SRV-RP-NGINX-01 | Reverse proxy Nginx | 10.199.0.200 |
+| SRV-APP-WP-01 | WordPress (Docker) | 10.200.0.200 |
+| SRV-MONIT-01 | Netdata + Patchmon | 10.200.0.199 |
+| SRV-MASTER-01 | Kubernetes RKE2 Master | 10.200.0.201 |
+| SRV-WORKER-01/02 | Kubernetes RKE2 Workers | 10.200.0.202 / .203 |
+
+---
+
+
+
