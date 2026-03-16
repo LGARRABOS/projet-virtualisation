@@ -28,42 +28,42 @@ Plutôt que de proposer une solution unique, nous avons structuré notre répons
 
 | Offre                                  | Objectif                                     | Pour qui ?                                      |
 | -------------------------------------- | -------------------------------------------- | ----------------------------------------------- |
-| **Offre 1 – Essentielle**              | Répondre au besoin minimal de virtualisation | Budget contraint, première étape                |
+| **Offre 1 – Essentielle**              | Sécuriser le réseau, applications dans le cloud | Budget contraint, apps métier déjà en cloud   |
 | **Offre 2 – Sécurisée et automatisée** | Infrastructure fiable et maintenable         | PME en croissance, professionnalisation du SI   |
 | **Offre 3 – Avancée et résiliente**    | Haute disponibilité et résilience            | Données sensibles, exigence forte de continuité |
 
 
 ---
 
-## Offre 1 – Infrastructure Essentielle
+## Offre 1 – Sécurité réseau (applications dans le cloud)
 
 ### En bref
 
-Une **première étape** vers la virtualisation et la centralisation de vos services, sans investissement matériel lourd (hors pare-feu).
+Une offre **100 % sécurité et connectivité** : pas d'achat de serveurs ni de virtualisation. Vos **applications métier restent dans le cloud**. Nous sécurisons uniquement votre réseau (pare-feu, segmentation, SD-WAN).
 
 ### Ce qui est inclus
 
 
 | Élément        | Détail                                                        |
 | -------------- | ------------------------------------------------------------- |
-| Virtualisation | XCP-ng (solution open source, sans licence)                   |
 | Réseau         | Segmentation par VLAN, pare-feu dédié avec règles de sécurité |
-| Hébergement    | Centralisation des machines virtuelles                        |
-| Sauvegardes    | Basiques                                                      |
-| Administration | Principalement manuelle                                       |
+| Connectivité   | SD-WAN pour interconnexion sécurisée des sites                |
+| Sécurité       | Protection périmétrique, contrôle d'accès, VPN                |
+| Applications   | Restent hébergées dans le cloud (SaaS, IaaS)                   |
 
 
 ### Avantages
 
-- Budget maîtrisé
+- Budget maîtrisé, pas d'investissement serveur
 - Mise en place rapide
-- Base solide pour évoluer vers les offres 2 ou 3
+- Sécurisation du trafic vers et depuis le cloud
+- Base solide pour évoluer vers les offres 2 ou 3 si besoin de virtualisation
 
 ### À qui s'adresse cette offre ?
 
 - Entreprises avec un **budget limité**
-- Première expérience de virtualisation
-- Pas d'achat de matériel physique supplémentaire (hors pare-feu)
+- Applications métier déjà dans le cloud (Office 365, ERP SaaS, etc.)
+- Besoin de sécuriser le réseau sans investir dans des serveurs
 
 ---
 
@@ -138,7 +138,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 | Critère                | Offre 1 | Offre 2 | Offre 3 |
 | ---------------------- | ------- | ------- | ------- |
-| Virtualisation         | ✔       | ✔       | ✔✔      |
+| Virtualisation         | ❌       | ✔       | ✔✔      |
 | Segmentation réseau    | ✔       | ✔       | ✔✔      |
 | Sécurité               | ✔       | ✔       | ✔✔      |
 | Sauvegarde 3-2-1       | ❌       | ✔       | ✔✔      |
@@ -177,7 +177,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 | Poste          | Offre 1                                 | Offres 2 & 3                |
 | -------------- | --------------------------------------- | --------------------------- |
-| Baies serveurs | Pessac : 42U ; Strasbourg : 24U         | Idem                        |
+| Baies rack     | Pessac : 24U ; Strasbourg : 24U (réseau uniquement) | Pessac : 42U ; Strasbourg : 24U |
 | Onduleurs      | 2x Eaton Ellipse PRO 850VA              | 2x Eaton 3000VA (rackables) |
 | PDU            | 4x bandeaux de prises rackables         | Idem                        |
 | Câblage        | RJ45 Cat6a, SFP+ 10G, DAC, passe-câbles | Idem                        |
@@ -187,7 +187,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 ### Offre 1 – Socle réseau sécurisé (SD-WAN)
 
-**Architecture :** Interconnexion des deux sites sans serveurs d'application.
+**Architecture :** Interconnexion sécurisée des deux sites. **Pas de serveurs ni de virtualisation** – les applications métier restent dans le cloud. Uniquement réseau, pare-feu et connectivité.
 
 
 | Poste                     | Détail                                                                 | Prix HT             |
@@ -265,16 +265,15 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 ### Infogérance 1 – Essentielle
 
-**Pour qui ?** Entreprises souhaitant externaliser la maintenance de base de l'infrastructure déployée.
+**Pour qui ?** Entreprises souhaitant externaliser la maintenance de base du socle réseau sécurisé (Offre 1).
 
 | Prestation | Détail |
 |------------|--------|
-| Périmètre | Serveurs, VMs, stockage, pare-feu, VPN – solutions installées uniquement |
+| Périmètre | Pare-feu, switches, Wi-Fi, VPN – solutions installées uniquement (pas de serveurs ni VMs) |
 | Horaires | Lundi–Vendredi, 9h–18h |
 | Support | Par ticket (délai de réponse : 4h ouvrées) |
-| Supervision | Surveillance des alertes critiques sur l'infrastructure |
+| Supervision | Surveillance des alertes critiques sur le réseau et les pare-feu |
 | Maintenance | Mises à jour planifiées (soir/week-end) |
-| Sauvegardes | Vérification hebdomadaire |
 | Rapport | Bilan mensuel d'activité |
 
 | Tarif | Montant |
@@ -341,7 +340,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 | Support 24/7 | ❌ | ❌ | ✔ |
 | Délai de réponse | 4h | 2h | 1h |
 | Supervision continue | ❌ | ✔ | ✔ |
-| Gestion sauvegardes | Vérification | Quotidienne | Croisée + tests |
+| Gestion sauvegardes | - (réseau uniquement) | Quotidienne | Croisée + tests |
 | Tests PRA/PCA | ❌ | 1x / an | Complets |
 | Réunion client | - | Trimestrielle | Mensuelle |
 | SLA garanti | ❌ | ❌ | ✔ |
@@ -355,7 +354,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 | Infrastructure | Infogérance recommandée |
 |----------------|-------------------------|
-| Offre 1 (Essentielle) | Infogérance 1 ou 2 |
+| Offre 1 (Sécurité réseau) | Infogérance 1 ou 2 |
 | Offre 2 (Standard) | Infogérance 2 ou 3 |
 | Offre 3 (Premium) | Infogérance 3 (Sérénité) |
 
