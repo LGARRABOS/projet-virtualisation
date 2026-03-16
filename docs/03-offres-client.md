@@ -11,10 +11,9 @@
 Votre entreprise connaît une **croissance rapide** et doit faire face à plusieurs enjeux :
 
 - Augmentation du nombre d'utilisateurs et de services
-- Infrastructure actuelle peu virtualisée et peu sécurisée
-- Manque de segmentation réseau
-- Sauvegardes insuffisamment maîtrisées
+- Réseau peu sécurisé et manque de segmentation
 - Exposition aux risques cyber
+- Sauvegardes et continuité insuffisamment maîtrisées (pour les données hébergées)
 - Besoin de **continuité de service** lors du déménagement
 
 **Votre objectif :** une solution **fiable**, **sécurisée**, **évolutive** et **financièrement maîtrisée**.
@@ -28,7 +27,7 @@ Plutôt que de proposer une solution unique, nous avons structuré notre répons
 
 | Offre                                  | Objectif                                     | Pour qui ?                                      |
 | -------------------------------------- | -------------------------------------------- | ----------------------------------------------- |
-| **Offre 1 – Essentielle**              | Sécuriser le réseau, applications dans le cloud | Budget contraint, apps métier déjà en cloud   |
+| **Offre 1 – Sécurité réseau**          | Sécuriser le réseau, applications dans le cloud | Budget contraint, apps métier déjà en cloud   |
 | **Offre 2 – Sécurisée et automatisée** | Infrastructure fiable et maintenable         | PME en croissance, professionnalisation du SI   |
 | **Offre 3 – Avancée et résiliente**    | Haute disponibilité et résilience            | Données sensibles, exigence forte de continuité |
 
@@ -71,26 +70,25 @@ Une offre **100 % sécurité et connectivité** : pas d'achat de serveurs ni de 
 
 ### En bref
 
-Une infrastructure **fiable**, **sécurisée** et **maintenable**, avec déploiement automatisé et plan de continuité.
+Une infrastructure **fiable**, **sécurisée** et **maintenable**, avec déploiement automatisé. Tout est centralisé à Pessac ; Strasbourg (sans serveur) accède aux ressources via VPN.
 
 ### Ce qui est inclus
 
 
 | Élément        | Détail                                              |
 | -------------- | --------------------------------------------------- |
-| Virtualisation | XCP-ng complet                                      |
+| Virtualisation | XCP-ng complet (Pessac uniquement)                  |
 | Réseau         | Segmentation par VLAN, pare-feu dédié               |
 | Sauvegardes    | Règle 3-2-1 (3 copies, 2 supports, 1 hors site)     |
 | Automatisation | Déploiement via Terraform + Cloud-Init + Ansible    |
-| Continuité     | PRA / PCA (Plan de Reprise / Continuité d'Activité) |
-| Matériel       | Serveurs, stockage et pare-feu adaptés              |
+| Matériel       | Serveur et stockage à Pessac, pare-feu sur les 2 sites |
 
 
 ### Avantages
 
 - Gestion simplifiée grâce à l'automatisation
 - Sauvegardes structurées et testées
-- Documentation et procédures de reprise
+- Coût maîtrisé : un seul site serveur (Strasbourg = agence connectée en VPN)
 
 ### À qui s'adresse cette offre ?
 
@@ -143,7 +141,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 | Sécurité               | ✔       | ✔       | ✔✔      |
 | Sauvegarde 3-2-1       | ❌       | ✔       | ✔✔      |
 | Automatisation (IaC)   | ❌       | ✔       | ✔✔      |
-| PRA / PCA              | ❌       | ✔       | ✔✔      |
+| PRA / PCA              | ❌       | ❌       | ✔✔      |
 | Évolutivité long terme | ⚠       | ✔       | ✔✔      |
 
 
@@ -204,7 +202,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 ### Offre 2 – Standard (centralisée Pessac)
 
-**Architecture :** Tout centralisé au siège. Strasbourg connecté en VPN.
+**Architecture :** Tout centralisé au siège (Pessac). **Strasbourg n'a pas de serveur** – accès distant aux applications via VPN. Pas de PRA/PCA (un seul site serveur).
 
 
 | Poste                     | Détail                                                    | Prix HT             |
@@ -235,7 +233,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 | Serveurs calcul           | 2x HPE ProLiant DL380 Gen11 (optimisés PRA)        | 25 000 €            |
 | Stockage enterprise       | 2x TrueNAS Enterprise (réplication ZFS temps réel) | 9 000 €             |
 | Main d'œuvre              | Configuration PRA et tests de bascule (10 jours)   | 6 000 €             |
-| **TOTAL PROJET**          |                                                    | **63 000 € HT**     |
+| **TOTAL PROJET**          |                                                    | **58 500 € HT**     |
 | **COÛT ANNUEL RÉCURRENT** | Licences (100 utilisateurs)                        | **4 500 € HT / an** |
 |                           | Abonnement Fibre Orange (2 sites)                  | **1 200 € HT / an** |
 |                           | **TOTAL ANNUEL**                                   | **5 700 € HT / an** |
@@ -250,10 +248,11 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 |                                            | Offre 1     | Offre 2     | Offre 3     |
 | ------------------------------------------ | ----------- | ----------- | ----------- |
-| **Investissement initial**                 | 22 900 € HT | 40 700 € HT | 63 000 € HT |
+| **Investissement initial**                 | 22 900 € HT | 40 700 € HT | 58 500 € HT |
 | **Coût annuel (licences + fibre)**         | 1 800 € HT  | 5 700 € HT  | 5 700 € HT  |
-| **Sur 3 ans (investissement + récurrent)** | 28 300 € HT | 57 800 € HT | 80 100 € HT |
+| **Sur 3 ans (investissement + récurrent)**  | 28 300 € HT | 57 800 € HT | 75 600 € HT |
 
+*Pour l'Offre 1 : coût annuel hors connectivité fibre. Ajouter 1 200 € HT/an si interconnexion des 2 sites.*
 
 ---
 
@@ -297,7 +296,6 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 | Supervision | Monitoring 24/7 des sites et tunnels VPN |
 | Maintenance | Mises à jour + interventions préventives |
 | Sauvegardes | Gestion quotidienne, vérification hebdomadaire |
-| PRA/PCA | Participation aux tests de bascule (1x / an) |
 | Rapport | Bilan mensuel détaillé + réunion trimestrielle |
 
 | Tarif | Montant |
@@ -341,7 +339,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 | Délai de réponse | 4h | 2h | 1h |
 | Supervision continue | ❌ | ✔ | ✔ |
 | Gestion sauvegardes | - (réseau uniquement) | Quotidienne | Croisée + tests |
-| Tests PRA/PCA | ❌ | 1x / an | Complets |
+| Tests PRA/PCA | ❌ | ❌ | Complets |
 | Réunion client | - | Trimestrielle | Mensuelle |
 | SLA garanti | ❌ | ❌ | ✔ |
 
