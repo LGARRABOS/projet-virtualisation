@@ -230,7 +230,7 @@ Un **haut niveau de disponibilité**, de **sécurité** et de **résilience**, a
 
 | Poste                     | Détail                                             | Prix HT             |
 | ------------------------- | -------------------------------------------------- | ------------------- |
-| Matériel réseau           | Pack multi-site complet                            | 14 500 €            |
+| Matériel réseau           | Pack multi-site complet                            | 18 500 €            |
 | Licences sécurité         | 2x FortiGate + 100x FortiClient EDR/ZTNA           | 4 500 € / an        |
 | Serveurs calcul           | 2x HPE ProLiant DL380 Gen11 (optimisés PRA)        | 25 000 €            |
 | Stockage enterprise       | 2x TrueNAS Enterprise (réplication ZFS temps réel) | 9 000 €             |
