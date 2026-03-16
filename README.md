@@ -1,6 +1,9 @@
-# Projet Virtualisation – Infrastructure IT PME
+# Réponse à Appel d'Offres : Refonte Infrastructure IT
 
-Réponse à une demande de **refonte d'infrastructure IT** pour une PME du secteur photovoltaïque, dans un contexte de déménagement, sécurisation du SI et continuité d'activité.
+**Référence Projet :** INFRA-PME-2026-V1  
+**Date :** 12 Janvier 2026  
+**Destinataire :** Direction Générale - PME Photovoltaïque  
+**Objet :** Proposition technique et financière suite à notre entretien de cadrage.
 
 ---
 
